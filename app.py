@@ -1295,107 +1295,70 @@ elif st.session_state["current_page"] == "DIAGNOSTIC":
             """) 
  
  
-# ========================================================= 
-# PAGE 3: ACTION QUEUE (WITH AI BRIEF & FULL EXTENSION TABLE) 
-# ========================================================= 
-elif st.session_state["current_page"] == "ACTION QUEUE": 
-     
-    st.markdown("# DHEIS ACTION QUEUE") 
-    st.caption("High-priority districts requiring immediate attention & targeted interventions") 
- 
-    high_df = ( 
-        filtered_df[filtered_df["priority_tier"] == "High"] 
-        .sort_values("priority_index", ascending=False) 
-        .copy() 
-    ) 
- 
-    # KPI Top Bar 
-    k1, k2, k3, k4 = st.columns(4) 
-    k1.metric("High Priority Districts", len(high_df)) 
-    k2.metric( 
-        "States/UTs Affected", 
-        high_df["state_name"].nunique() if len(high_df) > 0 else 0 
-    ) 
-    k3.metric( 
-        "Avg. Priority Index", 
-        round(high_df["priority_index"].mean(), 2) if len(high_df) > 0 else 0 
-    ) 
-    k4.metric( 
-        "Critical Districts", 
-        len(high_df[high_df["priority_index"] > 75]) 
-    ) 
- 
-    st.markdown("<br>", unsafe_allow_html=True) 
- 
-    # Main Action Layout: Left Table / Action View, Right Sidebar Panel (AI Brief & Summary) 
-    col_main, col_side = st.columns([2.2, 1]) 
- 
-    with col_main: 
-        # Check if Full List view toggle is active 
-        if st.session_state["show_full_action_list"]: 
-            st.markdown("### 📋 ALL HIGH PRIORITY DISTRICTS (FULL LIST)") 
- 
-            if st.button("← Back to Summary Action Queue View"): 
-                st.session_state["show_full_action_list"] = False 
-                st.rerun() 
-             
-            table_display_df = high_df.copy() 
- 
-        else: 
-            st.markdown( 
-                "<div class='card-title'>High Priority Districts Action Table</div>", 
-                unsafe_allow_html=True 
-            ) 
- 
-            table_display_df = high_df.head(10) 
- 
-        # Build detailed display columns for Action Queue 
-        action_rows = [] 
- 
-        for rank, (_, r) in enumerate( 
-            table_display_df.iterrows(), 
-            start=1 
-        ): 
-            st_avg = df[ 
-                df["state_name"] == r["state_name"] 
-            ].mean(numeric_only=True) 
- 
-            concern, act, gaps = get_district_gaps_and_action( 
-                r, 
-                st_avg 
-            ) 
-             
-            top_ind_str = ", ".join( 
-                [ 
-                    f"{g[1][1]} ({abs(round(g[1][2], 1))} pts)" 
-                    for g in gaps[:3] 
-                ] 
-            ) 
- 
-            action_rows.append({ 
-                "Rank": rank, 
-                "District": r["district_name"], 
-                "State": r["state_name"], 
-                "Priority Display": f"{round(r['priority_index'], 1)} - High", 
-                "Top Indicators": top_ind_str, 
-                "Recommended Action": act 
-            }) 
- 
-        act_df_display = pd.DataFrame(action_rows) 
- 
-        st.dataframe( 
-            act_df_display, 
-            hide_index=True, 
-            use_container_width=True, 
-            height=350 
-        ) 
- 
-        if not st.session_state["show_full_action_list"]: 
-            if st.button("VIEW ALL HIGH PRIORITY DISTRICTS →"): 
-                st.session_state["show_full_action_list"] = True 
-                st.rerun() 
- 
-        st.markdown("<br>", unsafe_allow_html=True) 
+# =========================================================
+# PAGE 3: ACTION QUEUE (WITH AI BRIEF & FULL EXTENSION TABLE)
+# =========================================================
+elif st.session_state["current_page"] == "ACTION QUEUE":
+    
+    st.markdown("# DHEIS ACTION QUEUE")
+    st.caption("High-priority districts requiring immediate attention & targeted interventions")
+
+    high_df = (
+        filtered_df[filtered_df["priority_tier"] == "High"]
+        .sort_values("priority_index", ascending=False)
+        .copy()
+    )
+
+    # KPI Top Bar
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric("High Priority Districts", len(high_df))
+    k2.metric("States/UTs Affected", high_df["state_name"].nunique() if len(high_df) > 0 else 0)
+    k3.metric("Avg. Priority Index", round(high_df["priority_index"].mean(), 2) if len(high_df) > 0 else 0)
+    k4.metric("Critical Districts", len(high_df[high_df["priority_index"] > 75]))
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Main Action Layout: Left Table / Action View, Right Sidebar Panel (AI Brief & Summary)
+    col_main, col_side = st.columns([2.2, 1])
+
+    with col_main:
+        # Check if Full List view toggle is active
+        if st.session_state["show_full_action_list"]:
+            st.markdown("### 📋 ALL HIGH PRIORITY DISTRICTS (FULL LIST)")
+            if st.button("← Back to Summary Action Queue View"):
+                st.session_state["show_full_action_list"] = False
+                st.rerun()
+            
+            table_display_df = high_df.copy()
+        else:
+            st.markdown("<div class='card-title'>High Priority Districts Action Table</div>", unsafe_allow_html=True)
+            table_display_df = high_df.head(10)
+
+        # Build detailed display columns for Action Queue
+        action_rows = []
+        for rank, (_, r) in enumerate(table_display_df.iterrows(), start=1):
+            st_avg = df[df["state_name"] == r["state_name"]].mean(numeric_only=True)
+            concern, act, gaps = get_district_gaps_and_action(r, st_avg)
+            
+            top_ind_str = ", ".join([f"{g[1][1]} ({abs(round(g[1][2], 1))} pts)" for g in gaps[:3]])
+            action_rows.append({
+                "Rank": rank,
+                "District": r["district_name"],
+                "State": r["state_name"],
+                "Priority Display": f"{round(r['priority_index'], 1)} - High",
+                "Top Indicators": top_ind_str,
+                "Recommended Action": act
+            })
+
+        act_df_display = pd.DataFrame(action_rows)
+        st.dataframe(act_df_display, hide_index=True, use_container_width=True, height=350)
+
+        if not st.session_state["show_full_action_list"]:
+            if st.button("VIEW ALL HIGH PRIORITY DISTRICTS →"):
+                st.session_state["show_full_action_list"] = True
+                st.rerun()
+
+        st.markdown("<br>", unsafe_allow_html=True)
  
         # Bottom Drivers Section 
         d1, d2 = st.columns(2) 
