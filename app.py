@@ -1008,7 +1008,7 @@ elif st.session_state["current_page"] == "DIAGNOSTIC":
             ) 
  
         with col4: 
-            st.markdown(f"<div class='card-title'>Top 5 High-Priority Districts ({scope_label})</div>", unsafe_allow_html=True) 
+            st.markdown(f"<div class='card-title'>Top High-Priority Districts ({scope_label})</div>", unsafe_allow_html=True) 
  
             top10 = filtered_df[ 
                 filtered_df["priority_tier"] == "High" 
