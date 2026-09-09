@@ -1,0 +1,6 @@
+streamlit==1.63.0
+pandas
+numpy
+plotly==7.0.0
+groq==1.7.0
+python-dotenv==1.2.3
