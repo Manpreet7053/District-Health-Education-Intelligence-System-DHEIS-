@@ -15,8 +15,7 @@
 - [System Architecture](#system-architecture)
 - [Methodology](#methodology)
 - [Tech Stack](#tech-stack)
-- [Repository Structure](#repository-structure)
-- [Screenshots](#screenshots)
+- [Repository Structure](#repository-structure
 - [Getting Started](#getting-started)
 - [Data Sources](#data-sources)
 - [Limitations](#limitations)
@@ -101,10 +100,6 @@ dheis/
 │   └── district_priority_snapshot.csv   # Gold-table snapshot used by the app
 └── README.md
 ```
-
-## Screenshots
-
-*Add screenshots of your Power BI Overview, Diagnostic, Action Queue, Resource Allocation pages and the Streamlit app here.*
 
 ## Getting Started
 
