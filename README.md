@@ -15,7 +15,7 @@
 - [System Architecture](#system-architecture)
 - [Methodology](#methodology)
 - [Tech Stack](#tech-stack)
-- [Repository Structure](#repository-structure
+- [Repository Structure](#repository-structure)
 - [Getting Started](#getting-started)
 - [Data Sources](#data-sources)
 - [Limitations](#limitations)
